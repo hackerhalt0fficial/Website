@@ -1,12 +1,14 @@
-/* ============================================
-   RedTeam Toolkit - Main Script (Final Updated)
+/* ==========================================================
+   RedTeam Toolkit - Main JavaScript (Final Version)
    Author: Abhishek Aswal (HackerHalt)
+   Version: 3.0
    Features:
-   - Page Navigation & Theme
-   - Copy to Clipboard
-   - Contact Form Discord Webhook
-   - Payment Webhook Integration (Google Pay QR)
-   ============================================ */
+   ✅ Page Navigation
+   ✅ Theme Toggle
+   ✅ Copy to Clipboard
+   ✅ Contact Form Discord Webhook
+   ✅ Payment QR Webhook Integration
+   ========================================================== */
 
 // ============================================
 // COURSE DATA
@@ -27,12 +29,12 @@ const courses = [
 // ============================================
 function showPage(pageId) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    const el = document.getElementById(pageId);
-    if (el) el.classList.add('active');
+    const activePage = document.getElementById(pageId);
+    if (activePage) activePage.classList.add('active');
 
-    document.querySelectorAll('.nav-link').forEach(l => {
-        l.classList.remove('active');
-        if (l.getAttribute('data-page') === pageId) l.classList.add('active');
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('data-page') === pageId) link.classList.add('active');
     });
 
     window.scrollTo(0, 0);
@@ -66,12 +68,12 @@ function renderCourses() {
 function toggleTheme() {
     const body = document.body;
     const icon = document.querySelector('#theme-toggle i');
-    const dark = body.getAttribute('data-theme') === 'dark';
+    const darkMode = body.getAttribute('data-theme') === 'dark';
 
-    body.setAttribute('data-theme', dark ? 'light' : 'dark');
-    icon.classList.toggle('fa-sun', !dark);
-    icon.classList.toggle('fa-moon', dark);
-    localStorage.setItem('theme', dark ? 'light' : 'dark');
+    body.setAttribute('data-theme', darkMode ? 'light' : 'dark');
+    icon.classList.toggle('fa-sun', !darkMode);
+    icon.classList.toggle('fa-moon', darkMode);
+    localStorage.setItem('theme', darkMode ? 'light' : 'dark');
 }
 
 // ============================================
@@ -82,11 +84,13 @@ function copyToClipboard(id, btnId) {
     const button = document.getElementById(btnId);
     if (!element || !button) return;
 
-    navigator.clipboard.writeText(element.value).then(() => {
-        const old = button.textContent;
-        button.textContent = 'Copied!';
-        setTimeout(() => (button.textContent = old), 1500);
-    });
+    navigator.clipboard.writeText(element.value)
+        .then(() => {
+            const oldText = button.textContent;
+            button.textContent = 'Copied!';
+            setTimeout(() => button.textContent = oldText, 1500);
+        })
+        .catch(err => console.error('Clipboard error:', err));
 }
 
 // ============================================
@@ -99,7 +103,7 @@ const DISCORD_WEBHOOK_PAYMENT =
     'https://discord.com/api/webhooks/1423618167393091665/OMoXUgQhfIl3s3kCAI7lGO9ksg8Pu7o5VS_0A5fLsEUccYxKU54ktlfV-KKNVeEQp2SK';
 
 // ============================================
-// SEND TO DISCORD (Reusable Function)
+// SEND DATA TO DISCORD (Reusable Function)
 // ============================================
 async function sendToDiscord(webhookURL, title, data) {
     const embed = {
@@ -110,7 +114,7 @@ async function sendToDiscord(webhookURL, title, data) {
             value: data[key] || 'Not provided',
             inline: true
         })),
-        footer: { text: 'RedTeam Toolkit System' },
+        footer: { text: 'HackerHalt | RedTeam Toolkit' },
         timestamp: new Date().toISOString()
     };
 
@@ -152,7 +156,7 @@ async function handleContactSubmit(e) {
     };
 
     if (!formData['👤 Name'] || !formData['📧 Email'] || !formData['📝 Subject'] || !formData['💬 Message']) {
-        showAlert('⚠️ Please fill all fields.', 'danger');
+        showAlert('⚠️ Please fill in all fields.', 'danger');
         return;
     }
 
@@ -164,7 +168,7 @@ async function handleContactSubmit(e) {
     const ok = await sendToDiscord(DISCORD_WEBHOOK_CONTACT, '📩 New Contact Form Submission', formData);
 
     if (ok) {
-        showAlert('✅ Message sent successfully! Redirecting to Discord...', 'success');
+        showAlert('✅ Message sent successfully! Redirecting to our Discord...', 'success');
         document.getElementById('contactForm').reset();
         setTimeout(() => window.open('https://discord.gg/YOUR_INVITE_LINK', '_blank'), 2000);
     } else {
@@ -177,59 +181,63 @@ async function handleContactSubmit(e) {
 }
 
 // ============================================
-// PAYMENT HANDLER (QR CODE)
-–============================================
-async function handlePaymentConfirm() {
-    const upiID = document.getElementById('upi-id')?.value || 'Not captured';
-    const paymentLink = document.getElementById('payment-link')?.value || 'Not captured';
+// PAYMENT QR WEBHOOK HANDLER
+// ============================================
+async function handlePaymentSubmit(e) {
+    e.preventDefault();
+
+    const upiID = document.getElementById('upi-id')?.value || 'Not provided';
+    const paymentLink = document.getElementById('payment-link')?.value || 'Not provided';
+    const payerName = document.getElementById('payer-name')?.value.trim() || 'Anonymous';
+    const amount = document.getElementById('amount')?.value.trim() || 'Not specified';
 
     const paymentData = {
-        '💰 Payment Type': 'Google Pay / UPI QR',
+        '💰 Payment Type': 'Google Pay / QR Code',
+        '👤 Payer Name': payerName,
         '💳 UPI ID': upiID,
+        '💵 Amount': `${amount} INR`,
         '🔗 Payment Link': paymentLink,
         '📅 Timestamp': new Date().toLocaleString()
     };
 
-    const ok = await sendToDiscord(DISCORD_WEBHOOK_PAYMENT, '💸 New Payment Attempt', paymentData);
+    const ok = await sendToDiscord(DISCORD_WEBHOOK_PAYMENT, '💸 New Payment Confirmation', paymentData);
 
     if (ok) {
-        alert('✅ Payment confirmation sent! Redirecting to Discord for verification...');
+        alert('✅ Payment details submitted successfully! Redirecting to our Discord for verification...');
         window.open('https://discord.gg/YOUR_INVITE_LINK', '_blank');
     } else {
-        alert('❌ Failed to send payment info. Please contact support.');
+        alert('❌ Failed to send payment info. Please try again later.');
     }
 }
 
 // ============================================
-// ALERT FUNCTION
+// ALERT BOX HANDLER
 // ============================================
-function showAlert(msg, type) {
+function showAlert(message, type) {
     const box = document.getElementById('formAlert');
-    box.textContent = msg;
+    box.textContent = message;
     box.className = `alert alert-${type} mt-3`;
     box.classList.remove('d-none');
-
-    if (type === 'success') setTimeout(() => box.classList.add('d-none'), 5000);
+    if (type === 'success') setTimeout(() => box.classList.add('d-none'), 6000);
 }
 
 // ============================================
 // INITIALIZATION
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
-    // Theme setup
-    const saved = localStorage.getItem('theme') || 'dark';
-    document.body.setAttribute('data-theme', saved);
-    const icon = document.querySelector('#theme-toggle i');
-    if (icon) {
-        icon.classList.toggle('fa-sun', saved === 'dark');
-        icon.classList.toggle('fa-moon', saved === 'light');
+    // Load saved theme
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.body.setAttribute('data-theme', savedTheme);
+
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        const icon = themeToggle.querySelector('i');
+        icon.classList.toggle('fa-sun', savedTheme === 'dark');
+        icon.classList.toggle('fa-moon', savedTheme === 'light');
+        themeToggle.addEventListener('click', toggleTheme);
     }
 
-    // Theme toggle
-    const themeToggle = document.getElementById('theme-toggle');
-    if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
-
-    // Navigation links
+    // Navigation
     document.querySelectorAll('.nav-link').forEach(link =>
         link.addEventListener('click', e => {
             e.preventDefault();
@@ -238,11 +246,11 @@ document.addEventListener('DOMContentLoaded', () => {
     );
 
     // Copy buttons
-    const copyButtons = [
+    const copyBtns = [
         { element: 'upi-id', button: 'copy-upi-id' },
         { element: 'payment-link', button: 'copy-payment-link' }
     ];
-    copyButtons.forEach(({ element, button }) => {
+    copyBtns.forEach(({ element, button }) => {
         const btn = document.getElementById(button);
         if (btn) btn.addEventListener('click', () => copyToClipboard(element, button));
     });
@@ -251,13 +259,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const contactForm = document.getElementById('contactForm');
     if (contactForm) contactForm.addEventListener('submit', handleContactSubmit);
 
-    // Payment handler (QR confirm button)
-    const qrPayBtn = document.querySelector('[data-bs-target="#donateModal"]');
-    if (qrPayBtn) qrPayBtn.addEventListener('click', handlePaymentConfirm);
+    // Payment form
+    const paymentForm = document.getElementById('paymentForm');
+    if (paymentForm) paymentForm.addEventListener('submit', handlePaymentSubmit);
 
     // Render courses
     renderCourses();
 
-    // Default to home
+    // Default to home page
     showPage('home');
 });
