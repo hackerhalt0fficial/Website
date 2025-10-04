@@ -1,11 +1,11 @@
 /* ============================================
-   RedTeam Toolkit - Main Script (Updated)
+   RedTeam Toolkit - Main Script (Final Updated)
+   Author: Abhishek Aswal (HackerHalt)
    Features:
-   - Dynamic page navigation
-   - Course rendering
-   - Theme toggle
-   - Copy-to-clipboard
-   - Discord Webhook Integration (Contact Form)
+   - Page Navigation & Theme
+   - Copy to Clipboard
+   - Contact Form Discord Webhook
+   - Payment Webhook Integration (Google Pay QR)
    ============================================ */
 
 // ============================================
@@ -26,13 +26,15 @@ const courses = [
 // PAGE NAVIGATION
 // ============================================
 function showPage(pageId) {
-    document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     const el = document.getElementById(pageId);
     if (el) el.classList.add('active');
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('data-page') === pageId) link.classList.add('active');
+
+    document.querySelectorAll('.nav-link').forEach(l => {
+        l.classList.remove('active');
+        if (l.getAttribute('data-page') === pageId) l.classList.add('active');
     });
+
     window.scrollTo(0, 0);
 }
 
@@ -43,15 +45,15 @@ function renderCourses() {
     const container = document.getElementById('courses-container');
     if (!container) return;
 
-    container.innerHTML = courses.map(course => `
+    container.innerHTML = courses.map(c => `
         <div class="col-md-6 mb-4">
             <div class="card course-card p-3 h-100">
-                <i class="fas ${course.icon} course-icon"></i>
-                <h4>${course.title}${course.new ? ' <span class="badge-new">New</span>' : ''}</h4>
-                <p>${course.description}</p>
+                <i class="fas ${c.icon} course-icon"></i>
+                <h4>${c.title}${c.new ? ' <span class="badge-new">New</span>' : ''}</h4>
+                <p>${c.description}</p>
                 <div class="mt-auto d-flex justify-content-between align-items-center">
-                    <span class="text-muted"><i class="fas fa-book me-1"></i>${course.lessons} lessons</span>
-                    <a href="course.html?id=${course.id}" class="btn btn-outline-accent">Explore Course</a>
+                    <span class="text-muted"><i class="fas fa-book me-1"></i>${c.lessons} lessons</span>
+                    <a href="course.html?id=${c.id}" class="btn btn-outline-accent">Explore Course</a>
                 </div>
             </div>
         </div>
@@ -63,50 +65,52 @@ function renderCourses() {
 // ============================================
 function toggleTheme() {
     const body = document.body;
-    const themeToggle = document.getElementById('theme-toggle');
-    const icon = themeToggle.querySelector('i');
+    const icon = document.querySelector('#theme-toggle i');
+    const dark = body.getAttribute('data-theme') === 'dark';
 
-    const isDark = body.getAttribute('data-theme') === 'dark';
-    body.setAttribute('data-theme', isDark ? 'light' : 'dark');
-    icon.classList.toggle('fa-sun', !isDark);
-    icon.classList.toggle('fa-moon', isDark);
-    localStorage.setItem('theme', isDark ? 'light' : 'dark');
+    body.setAttribute('data-theme', dark ? 'light' : 'dark');
+    icon.classList.toggle('fa-sun', !dark);
+    icon.classList.toggle('fa-moon', dark);
+    localStorage.setItem('theme', dark ? 'light' : 'dark');
 }
 
 // ============================================
 // COPY TO CLIPBOARD
 // ============================================
-function copyToClipboard(elementId, buttonId) {
-    const element = document.getElementById(elementId);
-    const button = document.getElementById(buttonId);
+function copyToClipboard(id, btnId) {
+    const element = document.getElementById(id);
+    const button = document.getElementById(btnId);
     if (!element || !button) return;
 
-    navigator.clipboard.writeText(element.value)
-        .then(() => {
-            const originalText = button.textContent;
-            button.textContent = 'Copied!';
-            setTimeout(() => (button.textContent = originalText), 2000);
-        })
-        .catch(err => console.error('Clipboard error:', err));
+    navigator.clipboard.writeText(element.value).then(() => {
+        const old = button.textContent;
+        button.textContent = 'Copied!';
+        setTimeout(() => (button.textContent = old), 1500);
+    });
 }
 
 // ============================================
-// DISCORD WEBHOOK INTEGRATION
+// DISCORD WEBHOOKS
 // ============================================
-const DISCORD_WEBHOOK_URL =
+const DISCORD_WEBHOOK_CONTACT =
     'https://discord.com/api/webhooks/1423577299743150171/iJ8umjXqODdnFNdSz8tEiDam4xbjYS5LURjcE0L6-_4jTSY7nt--mVey0eNgqnoINfj7';
 
-async function sendToDiscord(formData) {
+const DISCORD_WEBHOOK_PAYMENT =
+    'https://discord.com/api/webhooks/1423618167393091665/OMoXUgQhfIl3s3kCAI7lGO9ksg8Pu7o5VS_0A5fLsEUccYxKU54ktlfV-KKNVeEQp2SK';
+
+// ============================================
+// SEND TO DISCORD (Reusable Function)
+// ============================================
+async function sendToDiscord(webhookURL, title, data) {
     const embed = {
-        title: '📩 New Contact Form Submission',
+        title: title,
         color: 0x2f81f7,
-        fields: [
-            { name: '👤 Name', value: formData.name || 'Not provided', inline: true },
-            { name: '📧 Email', value: formData.email || 'Not provided', inline: true },
-            { name: '📝 Subject', value: formData.subject || 'Not provided', inline: true },
-            { name: '💬 Message', value: formData.message || 'Not provided' }
-        ],
-        footer: { text: 'RedTeam Toolkit Contact Form' },
+        fields: Object.keys(data).map(key => ({
+            name: key,
+            value: data[key] || 'Not provided',
+            inline: true
+        })),
+        footer: { text: 'RedTeam Toolkit System' },
         timestamp: new Date().toISOString()
     };
 
@@ -117,7 +121,7 @@ async function sendToDiscord(formData) {
     };
 
     try {
-        const res = await fetch(DISCORD_WEBHOOK_URL, {
+        const res = await fetch(webhookURL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
@@ -132,89 +136,106 @@ async function sendToDiscord(formData) {
 // ============================================
 // CONTACT FORM HANDLER
 // ============================================
-async function handleFormSubmit(e) {
+async function handleContactSubmit(e) {
     e.preventDefault();
-    const submitBtn = document.getElementById('submitBtn');
-    const spinner = submitBtn.querySelector('.spinner-border');
-    const submitText = submitBtn.querySelector('.submit-text');
-    const formAlert = document.getElementById('formAlert');
+
+    const btn = document.getElementById('submitBtn');
+    const spinner = btn.querySelector('.spinner-border');
+    const text = btn.querySelector('.submit-text');
+    const alertBox = document.getElementById('formAlert');
 
     const formData = {
-        name: document.getElementById('name').value.trim(),
-        email: document.getElementById('email').value.trim(),
-        subject: document.getElementById('subject').value,
-        message: document.getElementById('message').value.trim()
+        '👤 Name': document.getElementById('name').value.trim(),
+        '📧 Email': document.getElementById('email').value.trim(),
+        '📝 Subject': document.getElementById('subject').value,
+        '💬 Message': document.getElementById('message').value.trim()
     };
 
-    // Basic validation
-    if (!formData.name || !formData.email || !formData.subject || !formData.message) {
-        showAlert('⚠️ Please fill in all fields.', 'danger');
+    if (!formData['👤 Name'] || !formData['📧 Email'] || !formData['📝 Subject'] || !formData['💬 Message']) {
+        showAlert('⚠️ Please fill all fields.', 'danger');
         return;
     }
 
-    // Show loading state
-    submitBtn.disabled = true;
+    btn.disabled = true;
     spinner.classList.remove('d-none');
-    submitText.textContent = 'Sending...';
-    formAlert.classList.add('d-none');
+    text.textContent = 'Sending...';
+    alertBox.classList.add('d-none');
 
-    const success = await sendToDiscord(formData);
+    const ok = await sendToDiscord(DISCORD_WEBHOOK_CONTACT, '📩 New Contact Form Submission', formData);
 
-    if (success) {
-        showAlert('✅ Message sent successfully! Redirecting to our Discord...', 'success');
+    if (ok) {
+        showAlert('✅ Message sent successfully! Redirecting to Discord...', 'success');
         document.getElementById('contactForm').reset();
-        // Redirect after 2 seconds
-        setTimeout(() => {
-            window.open('https://discord.gg/YOUR_INVITE_LINK', '_blank');
-        }, 2000);
+        setTimeout(() => window.open('https://discord.gg/YOUR_INVITE_LINK', '_blank'), 2000);
     } else {
-        showAlert('❌ Failed to send message. Please try again later.', 'danger');
+        showAlert('❌ Failed to send. Please try again.', 'danger');
     }
 
-    // Reset button state
-    submitBtn.disabled = false;
+    btn.disabled = false;
     spinner.classList.add('d-none');
-    submitText.textContent = 'Send Message';
+    text.textContent = 'Send Message';
 }
 
 // ============================================
-// ALERT HANDLER
-// ============================================
-function showAlert(message, type) {
-    const formAlert = document.getElementById('formAlert');
-    formAlert.textContent = message;
-    formAlert.className = `alert alert-${type} mt-3`;
-    formAlert.classList.remove('d-none');
+// PAYMENT HANDLER (QR CODE)
+–============================================
+async function handlePaymentConfirm() {
+    const upiID = document.getElementById('upi-id')?.value || 'Not captured';
+    const paymentLink = document.getElementById('payment-link')?.value || 'Not captured';
 
-    if (type === 'success') {
-        setTimeout(() => formAlert.classList.add('d-none'), 6000);
+    const paymentData = {
+        '💰 Payment Type': 'Google Pay / UPI QR',
+        '💳 UPI ID': upiID,
+        '🔗 Payment Link': paymentLink,
+        '📅 Timestamp': new Date().toLocaleString()
+    };
+
+    const ok = await sendToDiscord(DISCORD_WEBHOOK_PAYMENT, '💸 New Payment Attempt', paymentData);
+
+    if (ok) {
+        alert('✅ Payment confirmation sent! Redirecting to Discord for verification...');
+        window.open('https://discord.gg/YOUR_INVITE_LINK', '_blank');
+    } else {
+        alert('❌ Failed to send payment info. Please contact support.');
     }
+}
+
+// ============================================
+// ALERT FUNCTION
+// ============================================
+function showAlert(msg, type) {
+    const box = document.getElementById('formAlert');
+    box.textContent = msg;
+    box.className = `alert alert-${type} mt-3`;
+    box.classList.remove('d-none');
+
+    if (type === 'success') setTimeout(() => box.classList.add('d-none'), 5000);
 }
 
 // ============================================
 // INITIALIZATION
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
-    // Load saved theme
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-    document.body.setAttribute('data-theme', savedTheme);
-
-    // Set icon based on theme
-    const themeToggle = document.getElementById('theme-toggle');
-    if (themeToggle) {
-        const icon = themeToggle.querySelector('i');
-        icon.classList.toggle('fa-sun', savedTheme === 'dark');
-        icon.classList.toggle('fa-moon', savedTheme === 'light');
-        themeToggle.addEventListener('click', toggleTheme);
+    // Theme setup
+    const saved = localStorage.getItem('theme') || 'dark';
+    document.body.setAttribute('data-theme', saved);
+    const icon = document.querySelector('#theme-toggle i');
+    if (icon) {
+        icon.classList.toggle('fa-sun', saved === 'dark');
+        icon.classList.toggle('fa-moon', saved === 'light');
     }
 
-    // Navigation
-    document.querySelectorAll('.nav-link').forEach(link => {
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
+
+    // Navigation links
+    document.querySelectorAll('.nav-link').forEach(link =>
         link.addEventListener('click', e => {
             e.preventDefault();
             showPage(link.getAttribute('data-page'));
-        });
-    });
+        })
+    );
 
     // Copy buttons
     const copyButtons = [
@@ -226,13 +247,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (btn) btn.addEventListener('click', () => copyToClipboard(element, button));
     });
 
+    // Contact form
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) contactForm.addEventListener('submit', handleContactSubmit);
+
+    // Payment handler (QR confirm button)
+    const qrPayBtn = document.querySelector('[data-bs-target="#donateModal"]');
+    if (qrPayBtn) qrPayBtn.addEventListener('click', handlePaymentConfirm);
+
     // Render courses
     renderCourses();
 
-    // Contact form
-    const contactForm = document.getElementById('contactForm');
-    if (contactForm) contactForm.addEventListener('submit', handleFormSubmit);
-
-    // Default page
+    // Default to home
     showPage('home');
 });
