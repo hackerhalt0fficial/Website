@@ -126,4 +126,139 @@ document.addEventListener('DOMContentLoaded', function() {
     showPage('home');
 });
 
+// Discord Webhook Integration
+const DISCORD_WEBHOOK_URL = 'YOUR_DISCORD_WEBHOOK_URL_HERE'; // Replace with your actual webhook URL
 
+async function sendToDiscord(formData) {
+    const embed = {
+        title: "📧 New Contact Form Submission",
+        color: 0x0099ff,
+        fields: [
+            {
+                name: "👤 Name",
+                value: formData.name || "Not provided",
+                inline: true
+            },
+            {
+                name: "📧 Email",
+                value: formData.email || "Not provided",
+                inline: true
+            },
+            {
+                name: "📝 Subject",
+                value: formData.subject || "Not provided",
+                inline: true
+            },
+            {
+                name: "💬 Message",
+                value: formData.message ? (formData.message.length > 1000 ? formData.message.substring(0, 1000) + "..." : formData.message) : "Not provided"
+            }
+        ],
+        footer: {
+            text: "RedTeam Toolkit Contact Form"
+        },
+        timestamp: new Date().toISOString()
+    };
+
+    try {
+        const response = await fetch(DISCORD_WEBHOOK_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+                embeds: [embed],
+                username: 'RedTeam Toolkit Bot',
+                avatar_url: 'https://cdn-icons-png.flaticon.com/512/3063/3063796.png'
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`Discord webhook failed: ${response.status}`);
+        }
+        
+        return true;
+    } catch (error) {
+        console.error('Error sending to Discord:', error);
+        return false;
+    }
+}
+
+// Form submission handler
+function handleFormSubmit(event) {
+    event.preventDefault();
+    
+    const submitBtn = document.getElementById('submitBtn');
+    const spinner = submitBtn.querySelector('.spinner-border');
+    const submitText = submitBtn.querySelector('.submit-text');
+    const formAlert = document.getElementById('formAlert');
+    
+    // Get form data
+    const formData = {
+        name: document.getElementById('name').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        subject: document.getElementById('subject').value,
+        message: document.getElementById('message').value.trim()
+    };
+    
+    // Validate form
+    if (!formData.name || !formData.email || !formData.subject || !formData.message) {
+        showAlert('Please fill in all required fields.', 'danger');
+        return;
+    }
+    
+    // Show loading state
+    submitBtn.disabled = true;
+    spinner.classList.remove('d-none');
+    submitText.textContent = 'Sending...';
+    formAlert.classList.add('d-none');
+    
+    // Send to Discord
+    sendToDiscord(formData)
+        .then(success => {
+            if (success) {
+                showAlert('Message sent successfully! We\'ll get back to you soon.', 'success');
+                document.getElementById('contactForm').reset();
+            } else {
+                showAlert('Failed to send message. Please try again or contact us through other methods.', 'danger');
+            }
+        })
+        .catch(error => {
+            console.error('Form submission error:', error);
+            showAlert('An error occurred. Please try again later.', 'danger');
+        })
+        .finally(() => {
+            // Reset button state
+            submitBtn.disabled = false;
+            spinner.classList.add('d-none');
+            submitText.textContent = 'Send Message';
+        });
+}
+
+// Alert function
+function showAlert(message, type) {
+    const formAlert = document.getElementById('formAlert');
+    formAlert.textContent = message;
+    formAlert.className = `alert alert-${type} mt-3`;
+    formAlert.classList.remove('d-none');
+    
+    // Auto-hide success messages after 5 seconds
+    if (type === 'success') {
+        setTimeout(() => {
+            formAlert.classList.add('d-none');
+        }, 5000);
+    }
+}
+
+// Add form event listener in the DOMContentLoaded event
+document.addEventListener('DOMContentLoaded', function() {
+    // ... your existing initialization code ...
+    
+    // Add contact form event listener
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        contactForm.addEventListener('submit', handleFormSubmit);
+    }
+    
+    // ... rest of your existing code ...
+});
