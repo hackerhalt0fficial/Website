@@ -66,53 +66,105 @@ const courses = [
     }
 ];
 
-// ===== Discord Webhook Integration =====
-const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1423577299743150171/iJ8umjXqODdnFNdSz8tEiDam4xbjYS5LURjcE0L6-_4jTSY7nt--mVey0eNgqnoINfj7';
+// ===== Webhook URLs =====
+const CONTACT_WEBHOOK_URL = 'https://discord.com/api/webhooks/1423577299743150171/iJ8umjXqODdnFNdSz8tEiDam4xbjYS5LURjcE0L6-_4jTSY7nt--mVey0eNgqnoINfj7';
+const PAYMENT_WEBHOOK_URL = 'https://discord.com/api/webhooks/1423618167393091665/OMoXUgQhfIl3s3kCAI7lGO9ksg8Pu7o5VS_0A5fLsEUccYxKU54ktlfV-KKNVeEQp2SK';
 
+// ===== Discord Webhook Integration =====
 /**
- * Send form data to Discord webhook
- * @param {Object} formData - Form data object
+ * Send data to Discord webhook
+ * @param {Object} data - Data to send
+ * @param {string} webhookUrl - Webhook URL
+ * @param {string} type - Type of notification (contact/payment)
  * @returns {Promise<boolean>} - Success status
  */
-async function sendToDiscord(formData) {
-    const embed = {
-        title: "📧 New Contact Form Submission",
-        color: 0x0099ff,
-        fields: [
-            {
-                name: "👤 Name",
-                value: formData.name || "Not provided",
-                inline: true
+async function sendToDiscord(data, webhookUrl, type = 'contact') {
+    let embed;
+    
+    if (type === 'payment') {
+        embed = {
+            title: "💰 New Payment Received",
+            color: 0x00ff00,
+            fields: [
+                {
+                    name: "👤 Payer Name",
+                    value: data.payerName || "Not provided",
+                    inline: true
+                },
+                {
+                    name: "📧 Email",
+                    value: data.payerEmail || "Not provided",
+                    inline: true
+                },
+                {
+                    name: "💵 Amount",
+                    value: `₹${data.paymentAmount}` || "Not provided",
+                    inline: true
+                },
+                {
+                    name: "💳 Payment Method",
+                    value: data.paymentMethod || "Not provided",
+                    inline: true
+                },
+                {
+                    name: "🆔 Transaction ID",
+                    value: data.transactionId || "Not provided",
+                    inline: true
+                },
+                {
+                    name: "💬 Message",
+                    value: data.paymentMessage ? 
+                        (data.paymentMessage.length > 500 ? 
+                            data.paymentMessage.substring(0, 500) + "..." : 
+                            data.paymentMessage) : 
+                        "No additional message"
+                }
+            ],
+            footer: {
+                text: "RedTeam Toolkit Payment Notification"
             },
-            {
-                name: "📧 Email",
-                value: formData.email || "Not provided",
-                inline: true
+            timestamp: new Date().toISOString()
+        };
+    } else {
+        embed = {
+            title: "📧 New Contact Form Submission",
+            color: 0x0099ff,
+            fields: [
+                {
+                    name: "👤 Name",
+                    value: data.name || "Not provided",
+                    inline: true
+                },
+                {
+                    name: "📧 Email",
+                    value: data.email || "Not provided",
+                    inline: true
+                },
+                {
+                    name: "📝 Subject",
+                    value: data.subject || "Not provided",
+                    inline: true
+                },
+                {
+                    name: "💬 Message",
+                    value: data.message ? 
+                        (data.message.length > 1000 ? 
+                            data.message.substring(0, 1000) + "..." : 
+                            data.message) : 
+                        "Not provided"
+                }
+            ],
+            footer: {
+                text: "RedTeam Toolkit Contact Form"
             },
-            {
-                name: "📝 Subject",
-                value: formData.subject || "Not provided",
-                inline: true
-            },
-            {
-                name: "💬 Message",
-                value: formData.message ? 
-                    (formData.message.length > 1000 ? 
-                        formData.message.substring(0, 1000) + "..." : 
-                        formData.message) : 
-                    "Not provided"
-            }
-        ],
-        footer: {
-            text: "RedTeam Toolkit Contact Form"
-        },
-        timestamp: new Date().toISOString()
-    };
+            timestamp: new Date().toISOString()
+        };
+    }
 
     try {
         // Using CORS proxy to bypass GitHub Pages restrictions
         const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-        const response = await fetch(proxyUrl + DISCORD_WEBHOOK_URL, {
+        const response = await fetch(proxyUrl + webhookUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -120,7 +172,7 @@ async function sendToDiscord(formData) {
             },
             body: JSON.stringify({ 
                 embeds: [embed],
-                username: 'RedTeam Toolkit Bot',
+                username: type === 'payment' ? 'RedTeam Payment Bot' : 'RedTeam Toolkit Bot',
                 avatar_url: 'https://cdn-icons-png.flaticon.com/512/3063/3063796.png'
             })
         });
@@ -135,7 +187,7 @@ async function sendToDiscord(formData) {
         
         // Fallback: Try direct connection with no-cors
         try {
-            await fetch(DISCORD_WEBHOOK_URL, {
+            await fetch(webhookUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -143,7 +195,7 @@ async function sendToDiscord(formData) {
                 mode: 'no-cors',
                 body: JSON.stringify({
                     embeds: [embed],
-                    username: 'RedTeam Toolkit Bot'
+                    username: type === 'payment' ? 'RedTeam Payment Bot' : 'RedTeam Toolkit Bot'
                 })
             });
             return true; // With no-cors, we can't read response but request might still work
@@ -151,6 +203,216 @@ async function sendToDiscord(formData) {
             console.error('Fallback also failed:', fallbackError);
             return false;
         }
+    }
+}
+
+// ===== Payment System =====
+/**
+ * Handle payment form submission
+ * @param {Event} event - Form submit event
+ */
+function handlePaymentSubmit(event) {
+    event.preventDefault();
+    
+    const submitBtn = document.getElementById('submitPaymentBtn');
+    const spinner = submitBtn.querySelector('.spinner-border');
+    const submitText = submitBtn.querySelector('.submit-payment-text');
+    const paymentAlert = document.getElementById('paymentAlert');
+    
+    // Get payment data
+    const paymentData = {
+        payerName: document.getElementById('payerName').value.trim(),
+        payerEmail: document.getElementById('payerEmail').value.trim(),
+        paymentAmount: document.getElementById('paymentAmount').value.trim(),
+        paymentMethod: document.getElementById('paymentMethod').value,
+        transactionId: document.getElementById('transactionId').value.trim(),
+        paymentMessage: document.getElementById('paymentMessage').value.trim()
+    };
+    
+    // Validate payment form
+    if (!paymentData.payerName || !paymentData.payerEmail || !paymentData.paymentAmount || 
+        !paymentData.paymentMethod || !paymentData.transactionId) {
+        showPaymentAlert('Please fill in all required fields.', 'danger');
+        return;
+    }
+    
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(paymentData.payerEmail)) {
+        showPaymentAlert('Please enter a valid email address.', 'danger');
+        return;
+    }
+    
+    // Amount validation
+    const amount = parseFloat(paymentData.paymentAmount);
+    if (amount < 10) {
+        showPaymentAlert('Minimum payment amount is ₹10.', 'danger');
+        return;
+    }
+    
+    // Show loading state
+    submitBtn.disabled = true;
+    spinner.classList.remove('d-none');
+    submitText.textContent = 'Processing Payment...';
+    paymentAlert.classList.add('d-none');
+    
+    // Send payment notification to Discord
+    sendToDiscord(paymentData, PAYMENT_WEBHOOK_URL, 'payment')
+        .then(success => {
+            if (success) {
+                showPaymentAlert('Payment details submitted successfully! We will verify and confirm your payment shortly.', 'success');
+                document.getElementById('paymentForm').reset();
+                
+                // Also send email confirmation (simulated)
+                simulateEmailConfirmation(paymentData);
+            } else {
+                showPaymentAlert('Failed to submit payment details. Please try again or contact us directly.', 'danger');
+            }
+        })
+        .catch(error => {
+            console.error('Payment submission error:', error);
+            showPaymentAlert('An error occurred. Please try again later.', 'danger');
+        })
+        .finally(() => {
+            // Reset button state
+            submitBtn.disabled = false;
+            spinner.classList.add('d-none');
+            submitText.textContent = 'Submit Payment Details';
+        });
+}
+
+/**
+ * Show payment alert message
+ * @param {string} message - Alert message
+ * @param {string} type - Alert type (success, danger, warning)
+ */
+function showPaymentAlert(message, type) {
+    const paymentAlert = document.getElementById('paymentAlert');
+    if (!paymentAlert) return;
+    
+    paymentAlert.textContent = message;
+    paymentAlert.className = `alert alert-${type} mt-3`;
+    paymentAlert.classList.remove('d-none');
+    
+    // Auto-hide success messages after 8 seconds
+    if (type === 'success') {
+        setTimeout(() => {
+            paymentAlert.classList.add('d-none');
+        }, 8000);
+    }
+}
+
+/**
+ * Simulate email confirmation (for demo purposes)
+ * @param {Object} paymentData - Payment data
+ */
+function simulateEmailConfirmation(paymentData) {
+    console.log('Sending email confirmation to:', paymentData.payerEmail);
+    console.log('Payment Details:', {
+        amount: `₹${paymentData.paymentAmount}`,
+        method: paymentData.paymentMethod,
+        transactionId: paymentData.transactionId
+    });
+    
+    // In a real implementation, you would send an actual email here
+    // This is just for demonstration
+}
+
+/**
+ * Fill sample payment data for testing
+ */
+function fillSamplePayment() {
+    document.getElementById('payerName').value = 'John Doe';
+    document.getElementById('payerEmail').value = 'john.doe@example.com';
+    document.getElementById('paymentAmount').value = '500';
+    document.getElementById('paymentMethod').value = 'UPI';
+    document.getElementById('transactionId').value = 'TXN' + Date.now();
+    document.getElementById('paymentMessage').value = 'Thank you for the amazing cybersecurity resources!';
+    
+    showPaymentAlert('Sample data filled. You can now test the payment submission.', 'info');
+}
+
+// ===== Contact Form Handling =====
+/**
+ * Handle contact form submission
+ * @param {Event} event - Form submit event
+ */
+function handleFormSubmit(event) {
+    event.preventDefault();
+    
+    const submitBtn = document.getElementById('submitBtn');
+    const spinner = submitBtn.querySelector('.spinner-border');
+    const submitText = submitBtn.querySelector('.submit-text');
+    const formAlert = document.getElementById('formAlert');
+    
+    // Get form data
+    const formData = {
+        name: document.getElementById('name').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        subject: document.getElementById('subject').value,
+        message: document.getElementById('message').value.trim()
+    };
+    
+    // Validate form
+    if (!formData.name || !formData.email || !formData.subject || !formData.message) {
+        showAlert('Please fill in all required fields.', 'danger');
+        return;
+    }
+    
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+        showAlert('Please enter a valid email address.', 'danger');
+        return;
+    }
+    
+    // Show loading state
+    submitBtn.disabled = true;
+    spinner.classList.remove('d-none');
+    submitText.textContent = 'Sending...';
+    formAlert.classList.add('d-none');
+    
+    // Send to Discord
+    sendToDiscord(formData, CONTACT_WEBHOOK_URL, 'contact')
+        .then(success => {
+            if (success) {
+                showAlert('Message sent successfully! We\'ll get back to you soon.', 'success');
+                document.getElementById('contactForm').reset();
+            } else {
+                showAlert('Failed to send message. Please try again or contact us through other methods.', 'danger');
+            }
+        })
+        .catch(error => {
+            console.error('Form submission error:', error);
+            showAlert('An error occurred. Please try again later.', 'danger');
+        })
+        .finally(() => {
+            // Reset button state
+            submitBtn.disabled = false;
+            spinner.classList.add('d-none');
+            submitText.textContent = 'Send Message';
+        });
+}
+
+// ===== Alert System =====
+/**
+ * Show alert message
+ * @param {string} message - Alert message
+ * @param {string} type - Alert type (success, danger, warning)
+ */
+function showAlert(message, type) {
+    const formAlert = document.getElementById('formAlert');
+    if (!formAlert) return;
+    
+    formAlert.textContent = message;
+    formAlert.className = `alert alert-${type} mt-3`;
+    formAlert.classList.remove('d-none');
+    
+    // Auto-hide success messages after 5 seconds
+    if (type === 'success') {
+        setTimeout(() => {
+            formAlert.classList.add('d-none');
+        }, 5000);
     }
 }
 
@@ -264,90 +526,6 @@ function copyToClipboard(elementId, buttonId) {
     }
 }
 
-// ===== Form Handling =====
-/**
- * Handle contact form submission
- * @param {Event} event - Form submit event
- */
-function handleFormSubmit(event) {
-    event.preventDefault();
-    
-    const submitBtn = document.getElementById('submitBtn');
-    const spinner = submitBtn.querySelector('.spinner-border');
-    const submitText = submitBtn.querySelector('.submit-text');
-    const formAlert = document.getElementById('formAlert');
-    
-    // Get form data
-    const formData = {
-        name: document.getElementById('name').value.trim(),
-        email: document.getElementById('email').value.trim(),
-        subject: document.getElementById('subject').value,
-        message: document.getElementById('message').value.trim()
-    };
-    
-    // Validate form
-    if (!formData.name || !formData.email || !formData.subject || !formData.message) {
-        showAlert('Please fill in all required fields.', 'danger');
-        return;
-    }
-    
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-        showAlert('Please enter a valid email address.', 'danger');
-        return;
-    }
-    
-    // Show loading state
-    submitBtn.disabled = true;
-    spinner.classList.remove('d-none');
-    submitText.textContent = 'Sending...';
-    formAlert.classList.add('d-none');
-    
-    // Send to Discord
-    sendToDiscord(formData)
-        .then(success => {
-            if (success) {
-                showAlert('Message sent successfully! We\'ll get back to you soon.', 'success');
-                document.getElementById('contactForm').reset();
-            } else {
-                showAlert('Failed to send message. Please try again or contact us through other methods.', 'danger');
-            }
-        })
-        .catch(error => {
-            console.error('Form submission error:', error);
-            showAlert('An error occurred. Please try again later.', 'danger');
-        })
-        .finally(() => {
-            // Reset button state
-            submitBtn.disabled = false;
-            spinner.classList.add('d-none');
-            submitText.textContent = 'Send Message';
-        });
-}
-
-// ===== Alert System =====
-/**
- * Show alert message
- * @param {string} message - Alert message
- * @param {string} type - Alert type (success, danger, warning)
- */
-function showAlert(message, type) {
-    const formAlert = document.getElementById('formAlert');
-    if (!formAlert) return;
-    
-    formAlert.textContent = message;
-    formAlert.className = `alert alert-${type} mt-3`;
-    formAlert.classList.remove('d-none');
-    
-    // Auto-hide success messages after 5 seconds
-    if (type === 'success') {
-        setTimeout(() => {
-            formAlert.classList.add('d-none');
-        }, 5000);
-    }
-}
-
 // ===== Utility Functions =====
 /**
  * Debounce function to limit function calls
@@ -433,6 +611,12 @@ function initializeApp() {
         contactForm.addEventListener('submit', handleFormSubmit);
     }
     
+    // Payment form
+    const paymentForm = document.getElementById('paymentForm');
+    if (paymentForm) {
+        paymentForm.addEventListener('submit', handlePaymentSubmit);
+    }
+    
     // Render courses
     renderCourses();
     
@@ -472,20 +656,17 @@ function initializeApp() {
 // ===== Event Listeners =====
 document.addEventListener('DOMContentLoaded', initializeApp);
 
-// Handle page refresh and navigation
-window.addEventListener('beforeunload', () => {
-    // Cleanup if needed
-});
+// Make fillSamplePayment function globally available
+window.fillSamplePayment = fillSamplePayment;
 
 // Export functions for testing (if needed)
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         sendToDiscord,
+        handlePaymentSubmit,
+        handleFormSubmit,
         showPage,
         renderCourses,
-        toggleTheme,
-        copyToClipboard,
-        handleFormSubmit,
-        showAlert
+        toggleTheme
     };
 }
