@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Registration - RedTeam Toolkit</title>
+    <meta name="description" content="Register for cybersecurity courses and training programs at RedTeam Toolkit.">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Roboto+Mono:wght@300;400;500&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <!-- Site stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top" role="navigation" aria-label="Main navigation">
+        <div class="container">
+            <a class="navbar-brand terminal-font glow-text" href="index.html">
+                <i class="fas fa-user-secret me-2"></i><span class="brand-red">RedTeam Toolkit</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html"><i class="fas fa-home me-1"></i>Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#tools"><i class="fas fa-tools me-1"></i>Tools</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#courses"><i class="fas fa-graduation-cap me-1"></i>Courses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#resources"><i class="fas fa-book me-1"></i>Resources</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#github"><i class="fab fa-github me-1"></i>GitHub</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#contact"><i class="fas fa-envelope me-1"></i>Contact</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center ms-3">
+                    <a href="login.html" class="btn btn-outline-accent me-2">
+                        <i class="fas fa-sign-in-alt me-1"></i>Login
+                    </a>
+                    <button class="btn btn-outline-accent" id="theme-toggle" aria-label="Toggle theme">
+                        <i class="fas fa-sun"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <main>
+        <div class="hero-section">
+            <div class="container">
+                <h1 class="hero-title terminal-font glow-text">Course Registration</h1>
+                <p class="hero-subtitle">Enroll in our cybersecurity courses and advance your skills. Choose from our comprehensive training programs designed for security professionals.</p>
+            </div>
+        </div>
+
+        <!-- Registration Form -->
+        <div class="container main-content py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-6 col-md-8">
+                    <div class="card registration-card course-registration-card">
+                        <div class="card-header text-center py-5">
+                            <div class="registration-icon mb-3">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <h2 class="section-title mb-3">
+                                Enroll in Course
+                            </h2>
+                            <p class="text-secondary mb-0 fs-5">Register for our cybersecurity training programs and advance your career.</p>
+                        </div>
+                        <div class="card-body p-5">
+                        
+                            <form id="registrationForm" class="course-registration-form">
+                                <div class="row">
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control form-control-lg" id="fullName" placeholder="Enter your full name" required>
+                                            <label for="fullName" class="fw-semibold">Full Name *</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mb-4">
+                                        <div class="form-floating">
+                                            <input type="email" class="form-control form-control-lg" id="email" placeholder="Enter your email address" required>
+                                            <label for="email" class="fw-semibold">Email Address *</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <div class="form-floating">
+                                        <input type="tel" class="form-control form-control-lg" id="phone" placeholder="Enter your phone number" required>
+                                        <label for="phone" class="fw-semibold">Phone Number *</label>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label for="course" class="form-label fw-semibold d-flex align-items-center">
+                                        <i class="fas fa-book me-2 text-accent"></i>Select Course *
+                                    </label>
+                                    <select class="form-control form-control-lg course-select" id="course" required>
+                                        <option value="">Choose a course</option>
+                                        <option value="active-directory">🎯 Active Directory Pentesting</option>
+                                        <option value="windows-fundamentals">🪟 Windows Fundamentals</option>
+                                        <option value="linux-fundamentals">🐧 Linux Fundamentals</option>
+                                        <option value="ceh">🛡️ CEH Preparation</option>
+                                        <option value="ejpt">📜 eJPT v2</option>
+                                        <option value="pnpt">🔍 PNPT</option>
+                                        <option value="aws">☁️ AWS Pentesting</option>
+                                        <option value="web-pentesting">🌐 Web Application Pentesting</option>
+                                        <option value="malware">🦠 Malware Analysis</option>
+                                        <option value="oscp">🎓 OSCP Preparation</option>
+                                        <option value="cloud">☁️ Cloud Security</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label for="experience" class="form-label fw-semibold d-flex align-items-center">
+                                        <i class="fas fa-chart-line me-2 text-accent"></i>Experience Level *
+                                    </label>
+                                    <select class="form-control form-control-lg experience-select" id="experience" required>
+                                        <option value="">Select your experience level</option>
+                                        <option value="Beginner">🟢 Beginner (0-1 years)</option>
+                                        <option value="Intermediate">🟡 Intermediate (1-3 years)</option>
+                                        <option value="Advanced">🟠 Advanced (3-5 years)</option>
+                                        <option value="Expert">🔴 Expert (5+ years)</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <label for="goals" class="form-label fw-semibold d-flex align-items-center">
+                                        <i class="fas fa-target me-2 text-accent"></i>Learning Goals
+                                    </label>
+                                    <textarea class="form-control form-control-lg" id="goals" rows="4" placeholder="What do you hope to achieve with this course? (Optional)"></textarea>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <div class="form-check terms-checkbox">
+                                        <input class="form-check-input" type="checkbox" id="terms" required>
+                                        <label class="form-check-label" for="terms">
+                                            I agree to the <a href="#" class="text-accent fw-semibold">Terms of Service</a> and <a href="#" class="text-accent fw-semibold">Privacy Policy</a> *
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-accent btn-lg w-100 py-3 registration-submit-btn" id="submitBtn">
+                                    <i class="fas fa-paper-plane me-2"></i>
+                                    <span class="submit-text">Register for Course</span>
+                                    <div class="spinner-border spinner-border-sm d-none" role="status">
+                                        <span class="visually-hidden">Processing registration...</span>
+                                    </div>
+                                </button>
+                            </form>
+                            
+                            <div id="formAlert" class="alert d-none mt-4"></div>
+                        </div>
+                        
+                        <div class="card-footer text-center py-4">
+                            <p class="text-secondary mb-0">Need help choosing a course? <a href="index.html#contact" class="text-accent fw-semibold">Contact us</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer mt-5">
+        <div class="container py-4">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start mb-2 mb-md-0">
+                    <small class="text-muted">&copy; 2025 RedTeam Toolkit. For educational and authorized testing only.</small>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <a href="#" class="me-3 social-icon" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="#" class="me-3 social-icon" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="me-3 social-icon" aria-label="Discord"><i class="fab fa-discord"></i></a>
+                    <a href="#" class="social-icon" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="registration.js"></script>
+</body>
+</html>
