@@ -385,65 +385,84 @@
                 </div>
             </div>
         </div>
-
-        <!-- Contact Page -->
-        <div id="contact" class="page">
-            <h2 class="section-title">Contact Us</h2>
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card p-4">
-                        <h4 class="card-title">Get In Touch</h4>
-                        <form>
-                            <div class="mb-3">
-                                <label for="name" class="form-label">Name</label>
-                                <input type="text" class="form-control" id="name" placeholder="Your Name">
-                            </div>
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="email" placeholder="Your Email">
-                            </div>
-                            <div class="mb-3">
-                                <label for="message" class="form-label">Message</label>
-                                <textarea class="form-control" id="message" rows="4" placeholder="Your Message"></textarea>
-                            </div>
-                            <button type="submit" class="btn btn-outline-accent">Send Message</button>
-                        </form>
+        
+                <!-- Contact Page -->
+<div id="contact" class="page">
+    <h2 class="section-title">Contact Us</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card p-4">
+                <h4 class="card-title">Get In Touch</h4>
+                <form id="contactForm">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" placeholder="Your Name" required>
                     </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" placeholder="Your Email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="subject" class="form-label">Subject</label>
+                        <select class="form-control" id="subject" required>
+                            <option value="">Select a subject</option>
+                            <option value="General Inquiry">General Inquiry</option>
+                            <option value="Course Support">Course Support</option>
+                            <option value="Technical Issue">Technical Issue</option>
+                            <option value="Partnership">Partnership</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Message</label>
+                        <textarea class="form-control" id="message" rows="4" placeholder="Your Message" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-outline-accent" id="submitBtn">
+                        <span class="submit-text">Send Message</span>
+                        <div class="spinner-border spinner-border-sm d-none" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </button>
+                </form>
+                <div id="formAlert" class="alert d-none mt-3"></div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card p-4">
+                <h4 class="card-title">Other Ways to Connect</h4>
+                <div class="resource-link mb-3">
+                    <i class="fab fa-github me-2 fa-lg"></i>
+                    <strong>GitHub:</strong> github.com/redteamtoolkit
                 </div>
-                <div class="col-md-6">
-                    <div class="card p-4">
-                        <h4 class="card-title">Other Ways to Connect</h4>
-                        <div class="resource-link mb-3">
-                            <i class="fab fa-github me-2 fa-lg"></i>
-                            <strong>GitHub:</strong> github.com/redteamtoolkit
-                        </div>
-                        <div class="resource-link mb-3">
-                            <i class="fab fa-twitter me-2 fa-lg"></i>
-                            <strong>Twitter:</strong> @redteamtoolkit
-                        </div>
-                        <div class="resource-link mb-3">
-                            <i class="fab fa-discord me-2 fa-lg"></i>
-                            <strong>Discord:</strong> Join our server
-                        </div>
-                        <div class="resource-link mb-3">
-                            <i class="fab fa-linkedin me-2 fa-lg"></i>
-                            <strong>LinkedIn:</strong> RedTeam Toolkit
-                        </div>
-                    </div>
-                    
-                    <div class="card p-4 mt-4">
-                        <h4 class="card-title">Support the Project</h4>
-                        <p>If you find our resources helpful, consider supporting us to help maintain and expand the platform.</p>
-                        <div class="d-grid gap-2">
-                            <a href="#" class="btn btn-outline-accent"><i class="fas fa-donate me-2"></i>Make a Donation</a>
-                            <a href="#" class="btn btn-outline-accent"><i class="fas fa-hands-helping me-2"></i>Become a Sponsor</a>
-                            <!-- QR modal trigger -->
-                            <button type="button" class="btn btn-accent" data-bs-toggle="modal" data-bs-target="#donateModal">
-                                <i class="fas fa-qrcode me-2"></i>Pay via QR
-                            </button>
-                        </div>
-                    </div>
-
+                <div class="resource-link mb-3">
+                    <i class="fab fa-twitter me-2 fa-lg"></i>
+                    <strong>Twitter:</strong> @redteamtoolkit
+                </div>
+                <div class="resource-link mb-3">
+                    <i class="fab fa-discord me-2 fa-lg"></i>
+                    <strong>Discord:</strong> Join our server
+                </div>
+                <div class="resource-link mb-3">
+                    <i class="fab fa-linkedin me-2 fa-lg"></i>
+                    <strong>LinkedIn:</strong> RedTeam Toolkit
+                </div>
+            </div>
+            
+            <div class="card p-4 mt-4">
+                <h4 class="card-title">Support the Project</h4>
+                <p>If you find our resources helpful, consider supporting us to help maintain and expand the platform.</p>
+                <div class="d-grid gap-2">
+                    <a href="#" class="btn btn-outline-accent"><i class="fas fa-donate me-2"></i>Make a Donation</a>
+                    <a href="#" class="btn btn-outline-accent"><i class="fas fa-hands-helping me-2"></i>Become a Sponsor</a>
+                    <!-- QR modal trigger -->
+                    <button type="button" class="btn btn-accent" data-bs-toggle="modal" data-bs-target="#donateModal">
+                        <i class="fas fa-qrcode me-2"></i>Pay via QR
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
                     <!-- Donate QR Modal -->
                     <div class="modal fade" id="donateModal" tabindex="-1" aria-labelledby="donateModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-lg">
