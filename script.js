@@ -165,7 +165,7 @@ async function handleFormSubmit(e) {
         document.getElementById('contactForm').reset();
         // Redirect after 2 seconds
         setTimeout(() => {
-            window.open('https://discord.gg/YOUR_INVITE_LINK', '_blank');
+            window.open('https://discord.gg/redteamtoolkit', '_blank');
         }, 2000);
     } else {
         showAlert('❌ Failed to send message. Please try again later.', 'danger');
@@ -216,15 +216,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Copy buttons
-    const copyButtons = [
-        { element: 'upi-id', button: 'copy-upi-id' },
-        { element: 'payment-link', button: 'copy-payment-link' }
-    ];
-    copyButtons.forEach(({ element, button }) => {
-        const btn = document.getElementById(button);
-        if (btn) btn.addEventListener('click', () => copyToClipboard(element, button));
-    });
 
     // Render courses
     renderCourses();
@@ -233,6 +224,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const contactForm = document.getElementById('contactForm');
     if (contactForm) contactForm.addEventListener('submit', handleFormSubmit);
 
+    // Initialize scroll animations
+    initScrollAnimations();
+    
     // Default page
     showPage('home');
 });
+
+// ============================================
+// SCROLL ANIMATIONS
+// ============================================
+function initScrollAnimations() {
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animated');
+            }
+        });
+    }, observerOptions);
+
+    // Observe all elements with animate-on-scroll class
+    document.querySelectorAll('.animate-on-scroll').forEach(el => {
+        observer.observe(el);
+    });
+}
