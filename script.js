@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Discord Webhook Integration
-const DISCORD_WEBHOOK_URL = 'YOUR_DISCORD_WEBHOOK_URL_HERE'; // Replace with your actual webhook URL
+const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1423577299743150171/iJ8umjXqODdnFNdSz8tEiDam4xbjYS5LURjcE0L6-_4jTSY7nt--mVey0eNgqnoINfj7'; // Replace with your actual webhook URL
 
 async function sendToDiscord(formData) {
     const embed = {
