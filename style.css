@@ -39,8 +39,8 @@
     --primary-bg: #ffffff;
     --secondary-bg: #f6f8fa;
     --accent-color: #0969da;
-    --text-primary: #24292f;
-    --text-secondary: #57606a;
+    --text-primary: #1a1a1a;
+    --text-secondary: #4a4a4a;
     --card-bg: #ffffff;
     --border-color: #d0d7de;
     --border-muted: #d8dee4;
@@ -58,30 +58,95 @@
 }
 
 body {
-    background-color: var(--primary-bg);
+    background: linear-gradient(135deg, var(--primary-bg) 0%, var(--secondary-bg) 100%);
+    background-attachment: fixed;
     color: var(--text-primary);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
     line-height: 1.6;
     min-height: 100vh;
     transition: background-color 0.3s, color 0.3s;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+}
+
+/* ===== Enhanced Animations ===== */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease;
+}
+
+.animate-on-scroll.animated {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 /* ===== Typography ===== */
 h1, h2, h3, h4, h5, h6 {
-    font-weight: 600;
+    font-weight: 700;
     line-height: 1.25;
     margin-bottom: 1rem;
+    color: var(--text-primary);
 }
 
 p {
     margin-bottom: 1rem;
-    color: var(--text-secondary);
+    color: var(--text-primary);
+    font-weight: 400;
 }
 
 .lead {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     line-height: 1.6;
-    color: var(--text-secondary);
+    color: var(--text-primary);
+    font-weight: 500;
 }
 
 .terminal-font {
@@ -142,8 +207,9 @@ p {
 }
 
 .nav-link {
-    color: var(--text-secondary) !important;
-    font-weight: 500;
+    color: var(--text-primary) !important;
+    font-weight: 600;
+    font-size: 0.95rem;
     padding: 0.5rem 0.75rem !important;
     border-radius: var(--border-radius);
     transition: var(--transition-base);
@@ -191,10 +257,12 @@ p {
 }
 
 .hero-subtitle {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     max-width: 700px;
     margin: 0 auto 2rem;
-    color: var(--text-secondary);
+    color: var(--text-primary);
+    font-weight: 500;
+    line-height: 1.5;
 }
 
 /* ===== Courses Header ===== */
@@ -229,7 +297,8 @@ p {
 .section-title {
     color: var(--accent-color);
     margin-bottom: 1.5rem;
-    font-weight: 600;
+    font-weight: 700;
+    font-size: 1.5rem;
     position: relative;
     display: inline-block;
     padding-bottom: 0.5rem;
@@ -251,25 +320,51 @@ p {
     margin-bottom: 20px;
 }
 
-/* ===== Cards ===== */
+/* ===== Enhanced Cards ===== */
 .card {
-    background-color: var(--card-bg);
+    background: linear-gradient(135deg, var(--card-bg) 0%, rgba(47, 129, 247, 0.02) 100%);
     border: 1px solid var(--border-color);
     color: var(--text-primary);
-    transition: all var(--transition-base);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     margin-bottom: 20px;
-    border-radius: var(--border-radius);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent-color), #58a6ff, var(--accent-color));
+    background-size: 200% 100%;
+    animation: shimmer 3s ease-in-out infinite;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.card:hover::before {
+    opacity: 1;
 }
 
 .card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--border-muted);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    border-color: rgba(47, 129, 247, 0.3);
+}
+
+.card:active {
+    transform: translateY(-4px) scale(1.01);
 }
 
 .card-title {
     color: var(--accent-color);
-    font-weight: 600;
+    font-weight: 700;
+    font-size: 1.25rem;
     margin-bottom: 1rem;
 }
 
@@ -312,8 +407,8 @@ p {
     align-items: center;
     gap: 0.5rem;
     padding: 0.5rem 1rem;
-    font-size: 0.875rem;
-    font-weight: 500;
+    font-size: 0.95rem;
+    font-weight: 600;
     border-radius: var(--border-radius);
     transition: all var(--transition-base);
     cursor: pointer;
@@ -358,7 +453,8 @@ p {
     display: flex;
     align-items: center;
     padding: 0.875rem 1rem;
-    color: var(--text-secondary);
+    color: var(--text-primary);
+    font-weight: 500;
     text-decoration: none;
     border-bottom: 1px solid var(--border-color);
     transition: all var(--transition-base);
@@ -395,7 +491,8 @@ p {
 
 .methodology-list li {
     padding: 0.875rem 1rem;
-    color: var(--text-secondary);
+    color: var(--text-primary);
+    font-weight: 500;
     border-bottom: 1px solid var(--border-color);
     display: flex;
     align-items: center;
@@ -461,8 +558,9 @@ p {
 }
 
 .form-label {
-    color: var(--text-secondary);
-    font-weight: 500;
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.95rem;
     margin-bottom: 0.5rem;
 }
 
@@ -582,30 +680,89 @@ select.form-control {
     filter: invert(1);
 }
 
-/* ===== Responsive Design ===== */
+/* ===== Enhanced Responsive Design ===== */
+@media (max-width: 1200px) {
+    .container {
+        max-width: 100%;
+        padding: 0 2rem;
+    }
+    
+    .hero-title {
+        font-size: 3rem;
+    }
+    
+    .section-title {
+        font-size: 1.4rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .hero-title {
+        font-size: 2.8rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.1rem;
+    }
+    
+    .navbar-nav {
+        text-align: center;
+        padding: 1rem 0;
+    }
+    
+    .navbar-nav .nav-link {
+        padding: 0.75rem 1rem;
+        margin: 0.25rem 0;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+    
+    .navbar-nav .nav-link:hover {
+        background-color: var(--accent-color-muted);
+        transform: translateX(5px);
+    }
+    
+    .d-flex.align-items-center.ms-3 {
+        justify-content: center;
+        margin-top: 1rem;
+        gap: 0.5rem;
+    }
+    
+    .btn {
+        width: 100%;
+        margin: 0.25rem 0;
+    }
+}
+
 @media (max-width: 768px) {
     .hero-title {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
+        line-height: 1.2;
     }
     
     .hero-subtitle {
         font-size: 1rem;
+        line-height: 1.5;
     }
     
     .courses-menu-scroll {
         justify-content: flex-start !important;
+        padding: 0 1rem;
     }
     
     .courses-menu-scroll .btn {
-        margin: 5px;
+        margin: 3px;
+        font-size: 0.85rem;
+        padding: 0.5rem 0.75rem;
     }
     
     .navbar-collapse {
         background-color: var(--secondary-bg);
-        padding: 1rem;
-        border-radius: var(--border-radius);
+        padding: 1.5rem;
+        border-radius: 12px;
         margin-top: 1rem;
         border: 1px solid var(--border-color);
+        box-shadow: var(--shadow-md);
     }
     
     .container {
@@ -613,30 +770,132 @@ select.form-control {
     }
     
     .hero-section {
-        padding: 60px 0;
+        padding: 50px 0 40px;
     }
     
     .courses-header {
         padding: 20px 0;
     }
+    
+    .card {
+        margin-bottom: 1.5rem;
+    }
+    
+    .card-body {
+        padding: 1.5rem;
+    }
+    
+    .section-title {
+        font-size: 1.3rem;
+        text-align: center;
+    }
+    
+    .methodology-list li {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .resource-link {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
 }
 
 @media (max-width: 576px) {
     .hero-title {
-        font-size: 2rem;
+        font-size: 1.8rem;
+        line-height: 1.1;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.95rem;
+        padding: 0 1rem;
     }
     
     .section-title {
-        font-size: 1.5rem;
+        font-size: 1.2rem;
+        text-align: center;
     }
     
     .card {
         margin-bottom: 1rem;
+        border-radius: 8px;
+    }
+    
+    .card-body {
+        padding: 1rem;
     }
     
     .btn {
         width: 100%;
         justify-content: center;
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+    
+    .navbar-toggler {
+        border: none;
+        padding: 0.25rem 0.5rem;
+    }
+    
+    .navbar-toggler:focus {
+        box-shadow: none;
+    }
+    
+    .courses-menu-scroll .btn {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.6rem;
+        margin: 2px;
+    }
+    
+    .methodology-list li {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.85rem;
+    }
+    
+    .resource-link {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.85rem;
+    }
+    
+    .form-control {
+        font-size: 0.9rem;
+    }
+    
+    .form-label {
+        font-size: 0.9rem;
+    }
+}
+
+/* ===== Extra Small Devices ===== */
+@media (max-width: 400px) {
+    .hero-title {
+        font-size: 1.6rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .container {
+        padding: 0 0.75rem;
+    }
+    
+    .card-body {
+        padding: 0.75rem;
+    }
+    
+    .btn {
+        font-size: 0.85rem;
+        padding: 0.6rem 0.8rem;
+    }
+    
+    .navbar-brand {
+        font-size: 1.1rem;
     }
 }
 
@@ -647,6 +906,322 @@ select.form-control {
         animation: none !important;
         transition: none !important;
     }
+}
+
+/* ===== Registration Page Styles ===== */
+.registration-card {
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    background-color: var(--card-bg);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.registration-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+}
+
+.course-registration-card {
+    background: linear-gradient(135deg, var(--card-bg) 0%, rgba(47, 129, 247, 0.02) 100%);
+    border: 1px solid rgba(47, 129, 247, 0.1);
+}
+
+.registration-card .card-header {
+    background: linear-gradient(135deg, var(--secondary-bg) 0%, rgba(47, 129, 247, 0.05) 100%);
+    border-bottom: 1px solid rgba(47, 129, 247, 0.1);
+    border-radius: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.registration-card .card-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-color), #58a6ff, var(--accent-color));
+    background-size: 200% 100%;
+    animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0%, 100% { background-position: 200% 0; }
+    50% { background-position: -200% 0; }
+}
+
+.registration-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--accent-color), #58a6ff);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    box-shadow: 0 10px 30px rgba(47, 129, 247, 0.3);
+    animation: float 3s ease-in-out infinite;
+}
+
+.registration-icon i {
+    font-size: 2rem;
+    color: white;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+.registration-card .card-footer {
+    background-color: var(--secondary-bg);
+    border-top: 1px solid var(--border-color);
+    border-radius: 0;
+}
+
+.registration-card .form-control-lg {
+    padding: 0.875rem 1rem;
+    font-size: 1rem;
+    border-radius: 12px;
+    border: 2px solid var(--border-color);
+    transition: all 0.3s ease;
+    background-color: var(--secondary-bg);
+}
+
+.registration-card .form-control-lg:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 0.2rem rgba(47, 129, 247, 0.25);
+    transform: translateY(-2px);
+    background-color: var(--card-bg);
+}
+
+.course-registration-form .form-floating > .form-control {
+    padding-top: 1.625rem;
+    padding-bottom: 0.625rem;
+    border-radius: 12px;
+    border: 2px solid var(--border-color);
+    background-color: var(--secondary-bg);
+    transition: all 0.3s ease;
+}
+
+.course-registration-form .form-floating > .form-control:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 0.2rem rgba(47, 129, 247, 0.25);
+    transform: translateY(-2px);
+    background-color: var(--card-bg);
+}
+
+.course-registration-form .form-floating > label {
+    color: var(--text-secondary);
+    font-weight: 600;
+    padding: 1rem;
+}
+
+.course-select, .experience-select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2347a3f3' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 1rem center;
+    background-repeat: no-repeat;
+    background-size: 16px 12px;
+    padding-right: 3rem;
+}
+
+.registration-card .form-label {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+}
+
+.registration-card .btn-lg {
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.registration-card .btn-lg:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(47, 129, 247, 0.4);
+}
+
+.registration-submit-btn {
+    background: linear-gradient(135deg, var(--accent-color), #58a6ff);
+    border: none;
+    position: relative;
+    overflow: hidden;
+}
+
+.registration-submit-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.registration-submit-btn:hover::before {
+    left: 100%;
+}
+
+.terms-checkbox {
+    background: rgba(47, 129, 247, 0.05);
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid rgba(47, 129, 247, 0.1);
+}
+
+.terms-checkbox .form-check-input {
+    width: 1.2rem;
+    height: 1.2rem;
+    margin-top: 0.1rem;
+}
+
+.terms-checkbox .form-check-input:checked {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+
+.registration-card .form-check {
+    padding-left: 1.5rem;
+}
+
+.registration-card .form-check-input {
+    width: 1.1rem;
+    height: 1.1rem;
+    margin-top: 0.1rem;
+}
+
+.registration-card .form-check-label {
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--text-primary);
+}
+
+/* Professional spacing adjustments */
+.main-content {
+    padding: 3rem 0;
+}
+
+.hero-section {
+    padding: 80px 0 60px;
+}
+
+@media (max-width: 768px) {
+    .registration-card .card-body {
+        padding: 1.5rem !important;
+    }
+    
+    .registration-card .card-header {
+        padding: 1.5rem 1.5rem 1rem !important;
+    }
+    
+    .registration-card .card-footer {
+        padding: 1rem 1.5rem 1.5rem !important;
+    }
+    
+    .main-content {
+        padding: 2rem 0;
+    }
+    
+    .hero-section {
+        padding: 60px 0 40px;
+    }
+    
+    .course-registration-form .row {
+        margin: 0;
+    }
+    
+    .course-registration-form .col-md-6 {
+        padding: 0;
+        margin-bottom: 1rem;
+    }
+    
+    .registration-icon {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .registration-icon i {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .registration-card {
+        margin: 0 0.5rem;
+        border-radius: 12px;
+    }
+    
+    .registration-card .card-body {
+        padding: 1rem !important;
+    }
+    
+    .registration-card .card-header {
+        padding: 1rem !important;
+    }
+    
+    .registration-card .card-footer {
+        padding: 1rem !important;
+    }
+    
+    .course-registration-form .form-floating > .form-control {
+        padding-top: 1.5rem;
+        padding-bottom: 0.5rem;
+        font-size: 0.9rem;
+    }
+    
+    .course-registration-form .form-floating > label {
+        font-size: 0.9rem;
+        padding: 0.75rem;
+    }
+    
+    .registration-icon {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .registration-icon i {
+        font-size: 1.2rem;
+    }
+    
+    .section-title {
+        font-size: 1.1rem;
+    }
+    
+    .text-secondary.fs-5 {
+        font-size: 0.9rem !important;
+    }
+}
+
+/* Enhanced form focus states */
+.registration-card .form-control:focus {
+    background-color: var(--secondary-bg);
+    border-color: var(--accent-color);
+    color: var(--text-primary);
+}
+
+/* Professional button states */
+.registration-card .btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* Alert styling improvements */
+.registration-card .alert {
+    border-radius: 8px;
+    font-size: 0.95rem;
+    padding: 1rem 1.25rem;
 }
 
 /* ===== Print Styles ===== */
