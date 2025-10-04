@@ -1,137 +1,610 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HackerHalt | RedTeam Toolkit</title>
-  <link rel="stylesheet" href="style.css" />
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-  />
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RedTeam Toolkit - Cybersecurity Training & Resources</title>
+    <meta name="description" content="Professional cybersecurity training platform offering penetration testing courses, red team tools, and security resources.">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&family=Roboto+Mono:wght@300;400;500&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <!-- Site stylesheet -->
+    <link rel="stylesheet" href="style.css">
 </head>
-
-<body data-theme="dark">
-  <!-- ====== NAVIGATION BAR ====== -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <div class="container">
-      <a class="navbar-brand" href="#">
-        <i class="fa-solid fa-shield-halved me-2"></i>HackerHalt
-      </a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarNav"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li><a class="nav-link active" data-page="home" href="#">Home</a></li>
-          <li><a class="nav-link" data-page="courses" href="#">Courses</a></li>
-          <li><a class="nav-link" data-page="contact" href="#">Contact</a></li>
-          <li><a class="nav-link" data-page="payment" href="#">Payment</a></li>
-          <li>
-            <button id="theme-toggle" class="btn btn-outline-light ms-3">
-              <i class="fa-solid fa-sun"></i>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top" role="navigation" aria-label="Main navigation">
+        <div class="container">
+            <a class="navbar-brand terminal-font glow-text" href="#">
+                <i class="fas fa-user-secret me-2"></i><span class="brand-red">RedTeam Toolkit</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
             </button>
-          </li>
-        </ul>
-      </div>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" data-page="home"><i class="fas fa-home me-1"></i>Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-page="tools"><i class="fas fa-tools me-1"></i>Tools</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-page="courses"><i class="fas fa-graduation-cap me-1"></i>Courses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-page="resources"><i class="fas fa-book me-1"></i>Resources</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-page="github"><i class="fab fa-github me-1"></i>GitHub</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-page="contact"><i class="fas fa-envelope me-1"></i>Contact</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center ms-3">
+                    <a href="login.html" class="btn btn-outline-accent me-2">
+                        <i class="fas fa-sign-in-alt me-1"></i>Login
+                    </a>
+                    <button class="btn btn-outline-accent" id="theme-toggle" aria-label="Toggle theme">
+                        <i class="fas fa-sun"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <main>
+        <div class="hero-section">
+            <div class="container">
+                <h1 class="hero-title terminal-font glow-text">RedTeam Toolkit</h1>
+                <p class="hero-subtitle">Your central hub for advanced penetration testing tools, training, and resources. Elevate your cybersecurity skills with our curated collection of professional-grade utilities and courses.</p>
+                <a href="#courses" class="btn btn-outline-accent btn-lg" data-page="courses">
+                    <i class="fas fa-binoculars me-2"></i>Explore Courses
+                </a>
+            </div>
+        </div>
+
+        <!-- Courses Menu Bar -->
+        <div class="courses-header">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="title-container">
+                            <h5 class="section-title">
+                                <i class="fas fa-graduation-cap"></i>Available Courses
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="d-flex flex-wrap justify-content-center courses-menu-scroll">
+                            <a href="course.html?id=active-directory" class="btn btn-outline-accent m-1">
+                                <i class="fas fa-server me-2"></i>Active Directory
+                            </a>
+                            <a href="course.html?id=windows-fundamentals" class="btn btn-outline-accent m-1">
+                                <i class="fab fa-windows me-2"></i>Windows Fundamentals
+                            </a>
+                            <a href="course.html?id=linux-fundamentals" class="btn btn-outline-accent m-1">
+                                <i class="fab fa-linux me-2"></i>Linux Fundamentals
+                            </a>
+                            <a href="course.html?id=ceh" class="btn btn-outline-accent m-1">
+                                <i class="fas fa-shield-alt me-2"></i>CEH Preparation
+                            </a>
+                            <a href="course.html?id=ejpt" class="btn btn-outline-accent m-1">
+                                <i class="fas fa-certificate me-2"></i>eJPT v2
+                            </a>
+                            <a href="course.html?id=pnpt" class="btn btn-outline-accent m-1">
+                                <i class="fas fa-bug me-2"></i>PNPT
+                            </a>
+                            <a href="course.html?id=aws" class="btn btn-outline-accent m-1">
+                                <i class="fab fa-aws me-2"></i>AWS Pentesting
+                            </a>
+                            <a href="course.html?id=web-pentesting" class="btn btn-outline-accent m-1">
+                                <i class="fas fa-globe me-2"></i>Web Application Pentesting
+                            </a>
+                            <a href="course.html?id=malware" class="btn btn-outline-accent m-1">
+                                <i class="fas fa-virus me-2"></i>Malware Analysis
+                            </a>
+                            <a href="course.html?id=oscp" class="btn btn-outline-accent m-1">
+                                <i class="fas fa-graduation-cap me-2"></i>OSCP Preparation
+                            </a>
+                            <a href="course.html?id=cloud" class="btn btn-outline-accent m-1">
+                                <i class="fas fa-cloud me-2"></i>Cloud Security
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="container main-content">
+            <!-- Home Page -->
+            <div id="home" class="page active">
+                <div class="row mt-5">
+                    <div class="col-lg-4 mb-4">
+                        <h2 class="section-title">Welcome to RedTeam Toolkit</h2>
+                        <p class="lead text-secondary">RedTeam Toolkit is a comprehensive platform for cybersecurity professionals and enthusiasts. We provide cutting-edge resources, training materials, and tools for penetration testing, red teaming, and ethical hacking.</p>
+                        
+                        <div class="card p-3 mb-4 mt-4">
+                            <h4 class="card-title">Latest Updates</h4>
+                            <a href="#" class="resource-link"><i class="fas fa-arrow-right me-2"></i>New AWS Pentesting Lab added</a>
+                            <a href="#" class="resource-link"><i class="fas fa-arrow-right me-2"></i>Mobile App Pentesting course updated</a>
+                            <a href="#" class="resource-link"><i class="fas fa-arrow-right me-2"></i>Windows Fundamentals module expanded</a>
+                            <a href="#" class="resource-link"><i class="fas fa-arrow-right me-2"></i>New CTF challenges available</a>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4 mb-4">
+                        <h3 class="section-title">Methodologies</h3>
+                        <div class="card methodology-card">
+                            <ul class="methodology-list">
+                                <li><i class="fas fa-angle-right me-2"></i>Pentesting Methodology</li>
+                                <li><i class="fas fa-angle-right me-2"></i>External Recon Methodology</li>
+                                <li><i class="fas fa-angle-right me-2"></i>Pentesting Network</li>
+                                <li><i class="fas fa-angle-right me-2"></i>Pentesting Wifi</li>
+                                <li><i class="fas fa-angle-right me-2"></i>Phishing Methodology</li>
+                                <li><i class="fas fa-angle-right me-2"></i>Basic Forensic Methodology</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 mb-4">
+                        <h3 class="section-title">Resources</h3>
+                        <ul class="methodology-list">
+                            <li>Python Sandbox Escape & Pyscript</li>
+                            <li>Threat Modeling</li>
+                            <li>Blockchain & Crypto</li>
+                            <li>Lua Sandbox Escape</li>
+                        </ul>
+
+                        <div class="card p-3 mt-4">
+                            <h4 class="card-title">Quick Links</h4>
+                            <a href="#" class="resource-link"><i class="fas fa-external-link-alt me-2"></i>PayloadsAllTheThings</a>
+                            <a href="#" class="resource-link"><i class="fas fa-external-link-alt me-2"></i>OWASP Cheat Sheets</a>
+                            <a href="#" class="resource-link"><i class="fas fa-external-link-alt me-2"></i>CyberChef</a>
+                            <a href="#" class="resource-link"><i class="fas fa-external-link-alt me-2"></i>GTFOBins</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 class="mt-5 section-title">Featured Courses</h3>
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="card course-card p-3">
+                            <i class="fab fa-windows course-icon"></i>
+                            <h4>Windows Fundamentals</h4>
+                            <p>Learn the core concepts of Windows operating system, security mechanisms, and exploitation techniques.</p>
+                            <a href="course.html?id=windows-fundamentals" class="btn btn-outline-accent mt-auto">Explore Course</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card course-card p-3">
+                            <i class="fas fa-server course-icon"></i>
+                            <h4>Active Directory</h4>
+                            <p>Master Active Directory penetration testing, from initial enumeration to domain domination.</p>
+                            <a href="course.html?id=active-directory" class="btn btn-outline-accent mt-auto">Explore Course</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card course-card p-3">
+                            <i class="fab fa-aws course-icon"></i>
+                            <h4>AWS Pentesting</h4>
+                            <p>Learn how to assess and secure AWS environments, identify misconfigurations, and exploit vulnerabilities.</p>
+                            <a href="course.html?id=aws" class="btn btn-outline-accent mt-auto">Explore Course</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card course-card p-3">
+                            <i class="fas fa-globe course-icon"></i>
+                            <h4>Web Application Pentesting</h4>
+                            <p>Master web application security testing, including OWASP Top 10, bug bounty techniques, and secure coding practices.</p>
+                            <a href="course.html?id=web-pentesting" class="btn btn-outline-accent mt-auto">Explore Course</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card course-card p-3">
+                            <i class="fas fa-virus course-icon"></i>
+                            <h4>Malware Analysis</h4>
+                            <p>Learn reverse engineering, dynamic analysis, and malware behavior analysis in a secure environment.</p>
+                            <a href="course.html?id=malware" class="btn btn-outline-accent mt-auto">Explore Course<span class="badge-new ms-2">New</span></a>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card course-card p-3">
+                            <i class="fas fa-graduation-cap course-icon"></i>
+                            <h4>OSCP Preparation</h4>
+                            <p>Comprehensive preparation guide for the OSCP certification, including hands-on labs and practice exercises.</p>
+                            <a href="course.html?id=oscp" class="btn btn-outline-accent mt-auto">Explore Course</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tools Page -->
+            <div id="tools" class="page">
+                <h2 class="section-title">RedTeam Tools</h2>
+                <p class="lead text-secondary mb-4">Comprehensive collection of professional penetration testing tools and frameworks.</p>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <div class="card p-3 h-100">
+                            <h4 class="card-title"><i class="fas fa-search me-2"></i>Reconnaissance</h4>
+                            <div class="resource-link d-flex align-items-center">
+                                <i class="fas fa-tools me-2"></i>
+                                <span class="me-auto">Msfvenom-Automation</span>
+                                <a href="https://raw.githubusercontent.com/hackerhalt0fficial/Tools/main/Auto-Payload.sh" class="btn btn-sm btn-outline-accent ms-2" target="_blank" rel="noopener noreferrer" download>
+                                    <i class="fas fa-download me-1"></i>Download
+                                </a>
+                            </div>
+                            <div class="resource-link"><i class="fas fa-tools me-2"></i>Amass - Attack Surface Mapping</div>
+                            <div class="resource-link"><i class="fas fa-tools me-2"></i>Subfinder - Subdomain Discovery</div>
+                            <div class="resource-link"><i class="fas fa-tools me-2"></i>theHarvester - OSINT Tool</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="card p-3 h-100">
+                            <h4 class="card-title"><i class="fas fa-shield-alt me-2"></i>Vulnerability Assessment</h4>
+                            <div class="resource-link"><i class="fas fa-tools me-2"></i>Nessus - Vulnerability Scanner</div>
+                            <div class="resource-link"><i class="fas fa-tools me-2"></i>OpenVAS - Vulnerability Management</div>
+                            <div class="resource-link"><i class="fas fa-tools me-2"></i>Nuclei - Customizable Scanner</div>
+                            <div class="resource-link"><i class="fas fa-tools me-2"></i>Burp Suite - Web Application Testing</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="card p-3 h-100">
+                            <h4 class="card-title"><i class="fas fa-bug me-2"></i>Exploitation</h4>
+                            <div class="resource-link"><i class="fas fa-tools me-2"></i>Metasploit - Penetration Testing Framework</div>
+                            <div class="resource-link"><i class="fas fa-tools me-2"></i>SQLmap - SQL Injection Tool</div>
+                            <div class="resource-link"><i class="fas fa-tools me-2"></i>John the Ripper - Password Cracker</div>
+                            <div class="resource-link"><i class="fas fa-tools me-2"></i>Hashcat - Advanced Password Recovery</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="card p-3 h-100">
+                            <h4 class="card-title"><i class="fas fa-flag me-2"></i>Post-Exploitation</h4>
+                            <div class="resource-link"><i class="fas fa-tools me-2"></i>Cobalt Strike - Red Team Operations</div>
+                            <div class="resource-link"><i class="fas fa-tools me-2"></i>Mimikatz - Windows Security Tool</div>
+                            <div class="resource-link"><i class="fas fa-tools me-2"></i>BloodHound - Active Directory Analysis</div>
+                            <div class="resource-link"><i class="fas fa-tools me-2"></i>Empire - Post-Exploitation Framework</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Courses Page -->
+            <div id="courses" class="page">
+                <h2 class="section-title">RedTeam Courses</h2>
+                <p class="lead text-secondary mb-4">Browse our comprehensive collection of cybersecurity courses designed for all skill levels.</p>
+                
+                <div class="row mt-4" id="courses-container">
+                    <!-- Courses will be dynamically loaded here -->
+                </div>
+            </div>
+
+            <!-- Resources Page -->
+            <div id="resources" class="page">
+                <h2 class="section-title">Cybersecurity Resources</h2>
+                <p class="lead text-secondary mb-4">Curated collection of cybersecurity references, cheat sheets, and learning materials.</p>
+                
+                <div class="row mt-4">
+                    <div class="col-md-6 mb-4">
+                        <div class="card p-3 h-100">
+                            <h4 class="card-title"><i class="fas fa-book me-2"></i>Methodologies</h4>
+                            <div class="resource-link"><i class="fas fa-book me-2"></i>OWASP Testing Guide</div>
+                            <div class="resource-link"><i class="fas fa-book me-2"></i>NIST Cybersecurity Framework</div>
+                            <div class="resource-link"><i class="fas fa-book me-2"></i>PTES Technical Guidelines</div>
+                            <div class="resource-link"><i class="fas fa-book me-2"></i>MITRE ATT&CK Framework</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="card p-3 h-100">
+                            <h4 class="card-title"><i class="fas fa-file-alt me-2"></i>Cheat Sheets</h4>
+                            <div class="resource-link"><i class="fas fa-file-alt me-2"></i>Reverse Shell Cheat Sheet</div>
+                            <div class="resource-link"><i class="fas fa-file-alt me-2"></i>Privilege Escalation Checklists</div>
+                            <div class="resource-link"><i class="fas fa-file-alt me-2"></i>Web Application Testing Checklist</div>
+                            <div class="resource-link"><i class="fas fa-file-alt me-2"></i>Network Protocols Reference</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="card p-3 h-100">
+                            <h4 class="card-title"><i class="fas fa-vial me-2"></i>Practice Labs</h4>
+                            <div class="resource-link"><i class="fas fa-vial me-2"></i>Vulnerable Web Applications</div>
+                            <div class="resource-link"><i class="fas fa-vial me-2"></i>CTF Challenges</div>
+                            <div class="resource-link"><i class="fas fa-vial me-2"></i>Penetration Testing Labs</div>
+                            <div class="resource-link"><i class="fas fa-vial me-2"></i>Malware Analysis Sandboxes</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="card p-3 h-100">
+                            <h4 class="card-title"><i class="fas fa-users me-2"></i>Communities</h4>
+                            <div class="resource-link"><i class="fas fa-users me-2"></i>Reddit /r/netsec</div>
+                            <div class="resource-link"><i class="fas fa-users me-2"></i>Stack Exchange Information Security</div>
+                            <div class="resource-link"><i class="fas fa-users me-2"></i>Discord Security Servers</div>
+                            <div class="resource-link"><i class="fas fa-users me-2"></i>Twitter Security Experts</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GitHub Page -->
+            <div id="github" class="page">
+                <h2 class="section-title">GitHub Resources</h2>
+                <p class="lead text-secondary mb-4">Open-source tools and repositories for red teaming and penetration testing.</p>
+                
+                <div class="row mt-4">
+                    <div class="col-md-6 mb-4">
+                        <div class="card p-3 h-100">
+                            <h4 class="card-title"><i class="fab fa-github me-2"></i>Popular Repositories</h4>
+                            <div class="resource-link"><i class="fab fa-github me-2"></i>BloodHoundAD/BloodHound</div>
+                            <div class="resource-link"><i class="fab fa-github me-2"></i>EmpireProject/Empire</div>
+                            <div class="resource-link"><i class="fab fa-github me-2"></i>SecureAuthCorp/impacket</div>
+                            <div class="resource-link"><i class="fab fa-github me-2"></i>rebootuser/LinEnum</div>
+                            <div class="resource-link"><i class="fab fa-github me-2"></i>PowerShellMafia/PowerSploit</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="card p-3 h-100">
+                            <h4 class="card-title"><i class="fas fa-list-alt me-2"></i>Wordlists & Payloads</h4>
+                            <div class="resource-link"><i class="fab fa-github me-2"></i>danielmiessler/SecLists</div>
+                            <div class="resource-link"><i class="fab fa-github me-2"></i>swisskyrepo/PayloadsAllTheThings</div>
+                            <div class="resource-link"><i class="fab fa-github me-2"></i>fuzzdb-project/fuzzdb</div>
+                            <div class="resource-link"><i class="fab fa-github me-2"></i>1N3/IntruderPayloads</div>
+                            <div class="resource-link"><i class="fab fa-github me-2"></i>berzerk0/Probable-Wordlists</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="card p-3 h-100">
+                            <h4 class="card-title"><i class="fas fa-graduation-cap me-2"></i>Learning Resources</h4>
+                            <div class="resource-link"><i class="fab fa-github me-2"></i>0x4D31/awesome-threat-detection</div>
+                            <div class="resource-link"><i class="fab fa-github me-2"></i>enaqx/awesome-pentest</div>
+                            <div class="resource-link"><i class="fab fa-github me-2"></i>coreb1t/awesome-pentest-cheat-sheets</div>
+                            <div class="resource-link"><i class="fab fa-github me-2"></i>rmusser01/Infosec_Reference</div>
+                            <div class="resource-link"><i class="fab fa-github me-2"></i>yeyintminthuhtut/Awesome-Red-Teaming</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <div class="card p-3 h-100">
+                            <h4 class="card-title"><i class="fas fa-flag me-2"></i>CTF Platforms</h4>
+                            <div class="resource-link"><i class="fab fa-github me-2"></i>CTFd/CTFd</div>
+                            <div class="resource-link"><i class="fab fa-github me-2"></i>facebook/fbctf</div>
+                            <div class="resource-link"><i class="fab fa-github me-2"></i>apsdehal/awesome-ctf</div>
+                            <div class="resource-link"><i class="fab fa-github me-2"></i>ztgrace/molecule</div>
+                            <div class="resource-link"><i class="fab fa-github me-2"></i>VulnHub</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Page -->
+            <div id="contact" class="page">
+                <h2 class="section-title">Contact Us</h2>
+                <p class="lead text-secondary mb-4">Get in touch with our team for questions, support, or partnership opportunities.</p>
+                
+                <div class="row">
+                    <div class="col-lg-6 mb-4">
+                        <div class="card p-4 h-100">
+                            <h4 class="card-title"><i class="fas fa-envelope me-2"></i>Get In Touch</h4>
+                            <form id="contactForm">
+                                <div class="mb-3">
+                                    <label for="name" class="form-label">Name *</label>
+                                    <input type="text" class="form-control" id="name" placeholder="Your Name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email *</label>
+                                    <input type="email" class="form-control" id="email" placeholder="Your Email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="subject" class="form-label">Subject *</label>
+                                    <select class="form-control" id="subject" required>
+                                        <option value="">Select a subject</option>
+                                        <option value="General Inquiry">General Inquiry</option>
+                                        <option value="Course Support">Course Support</option>
+                                        <option value="Technical Issue">Technical Issue</option>
+                                        <option value="Partnership">Partnership</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="message" class="form-label">Message *</label>
+                                    <textarea class="form-control" id="message" rows="4" placeholder="Your Message" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-accent w-100" id="submitBtn">
+                                    <span class="submit-text">Send Message</span>
+                                    <div class="spinner-border spinner-border-sm d-none" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </button>
+                            </form>
+                            <div id="formAlert" class="alert d-none mt-3"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-4">
+                        <div class="card p-4 mb-4">
+                            <h4 class="card-title"><i class="fas fa-share-alt me-2"></i>Other Ways to Connect</h4>
+                            <div class="resource-link mb-3">
+                                <i class="fab fa-github me-2 fa-lg"></i>
+                                <strong>GitHub:</strong> github.com/redteamtoolkit
+                            </div>
+                            <div class="resource-link mb-3">
+                                <i class="fab fa-twitter me-2 fa-lg"></i>
+                                <strong>Twitter:</strong> @redteamtoolkit
+                            </div>
+                            <div class="resource-link mb-3">
+                                <i class="fab fa-discord me-2 fa-lg"></i>
+                                <strong>Discord:</strong> Join our server
+                            </div>
+                            <div class="resource-link mb-3">
+                                <i class="fab fa-linkedin me-2 fa-lg"></i>
+                                <strong>LinkedIn:</strong> RedTeam Toolkit
+                            </div>
+                        </div>
+                        
+                        <!-- Updated Support Section with Payment Form -->
+                        <div class="card p-4">
+                            <h4 class="card-title"><i class="fas fa-hands-helping me-2"></i>Support the Project</h4>
+                            <p class="text-secondary mb-4">If you find our resources helpful, consider supporting us to help maintain and expand the platform.</p>
+                            
+                            <!-- Payment Form -->
+                            <form id="paymentForm">
+                                <div class="mb-3">
+                                    <label for="payerName" class="form-label">Your Name *</label>
+                                    <input type="text" class="form-control" id="payerName" placeholder="Enter your name" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="payerEmail" class="form-label">Email Address *</label>
+                                    <input type="email" class="form-control" id="payerEmail" placeholder="Enter your email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="paymentAmount" class="form-label">Amount (INR) *</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">₹</span>
+                                        <input type="number" class="form-control" id="paymentAmount" placeholder="Enter amount" min="10" step="10" required>
+                                    </div>
+                                    <div class="form-text">Minimum amount: ₹10</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="paymentMethod" class="form-label">Payment Method *</label>
+                                    <select class="form-control" id="paymentMethod" required>
+                                        <option value="">Select payment method</option>
+                                        <option value="UPI">UPI Payment</option>
+                                        <option value="Bank Transfer">Bank Transfer</option>
+                                        <option value="PayPal">PayPal</option>
+                                        <option value="Credit Card">Credit Card</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="transactionId" class="form-label">Transaction ID *</label>
+                                    <input type="text" class="form-control" id="transactionId" placeholder="Enter transaction reference" required>
+                                    <div class="form-text">Provide UPI transaction ID, bank reference number, or payment confirmation ID</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="paymentMessage" class="form-label">Message (Optional)</label>
+                                    <textarea class="form-control" id="paymentMessage" rows="3" placeholder="Any additional message..."></textarea>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-accent w-100 mb-3" id="submitPaymentBtn">
+                                    <span class="submit-payment-text">Submit Payment Details</span>
+                                    <div class="spinner-border spinner-border-sm d-none" role="status">
+                                        <span class="visually-hidden">Processing...</span>
+                                    </div>
+                                </button>
+                            </form>
+                            
+                            <div id="paymentAlert" class="alert d-none mt-3"></div>
+                            
+                            <!-- Quick Payment Options -->
+                            <div class="mt-4 pt-3 border-top">
+                                <h6 class="mb-3">Quick Payment Options</h6>
+                                <div class="d-grid gap-2">
+                                    <button type="button" class="btn btn-outline-accent" data-bs-toggle="modal" data-bs-target="#donateModal">
+                                        <i class="fas fa-qrcode me-2"></i>Pay via QR Code
+                                    </button>
+                                    <button type="button" class="btn btn-outline-accent" onclick="fillSamplePayment()">
+                                        <i class="fas fa-magic me-2"></i>Fill Sample Data
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Sponsors Section -->
+    <div class="container mt-5">
+        <h3 class="section-title text-center">Our Sponsors</h3>
+        <div class="row justify-content-center align-items-center mt-4">
+            <div class="col-6 col-md-2 text-center mb-4">
+                <img src="https://via.placeholder.com/130x60/161b22/58a6ff?text=SPONSOR+1" alt="Sponsor 1" class="sponsor-logo">
+            </div>
+            <div class="col-6 col-md-2 text-center mb-4">
+                <img src="https://via.placeholder.com/130x60/161b22/58a6ff?text=SPONSOR+2" alt="Sponsor 2" class="sponsor-logo">
+            </div>
+            <div class="col-6 col-md-2 text-center mb-4">
+                <img src="https://via.placeholder.com/130x60/161b22/58a6ff?text=SPONSOR+3" alt="Sponsor 3" class="sponsor-logo">
+            </div>
+            <div class="col-6 col-md-2 text-center mb-4">
+                <img src="https://via.placeholder.com/130x60/161b22/58a6ff?text=SPONSOR+4" alt="Sponsor 4" class="sponsor-logo">
+            </div>
+            <div class="col-6 col-md-2 text-center mb-4">
+                <img src="https://via.placeholder.com/130x60/161b22/58a6ff?text=SPONSOR+5" alt="Sponsor 5" class="sponsor-logo">
+            </div>
+        </div>
     </div>
-  </nav>
 
-  <!-- ====== HOME ====== -->
-  <section id="home" class="page active container mt-5 pt-5">
-    <div class="text-center">
-      <h1 class="fw-bold mt-4">Welcome to <span class="accent">HackerHalt</span></h1>
-      <p class="lead">
-        Empowering Cybersecurity Professionals with Real-world Skills.
-      </p>
+    <!-- Footer -->
+    <footer class="site-footer mt-5">
+        <div class="container py-4">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start mb-2 mb-md-0">
+                    <small class="text-muted">&copy; 2025 RedTeam Toolkit. For educational and authorized testing only.</small>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <a href="#" class="me-3 social-icon" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="#" class="me-3 social-icon" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="me-3 social-icon" aria-label="Discord"><i class="fab fa-discord"></i></a>
+                    <a href="#" class="social-icon" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Donate QR Modal -->
+    <div class="modal fade" id="donateModal" tabindex="-1" aria-labelledby="donateModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="donateModalLabel">Support RedTeam Toolkit</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 text-center mb-4">
+                            <h6 class="mb-3">UPI Payment</h6>
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=abhishekaswal777@okicici&pn=RedTeam%20Toolkit&am=100&cu=INR" 
+                                 alt="UPI Payment QR" class="img-fluid mb-3" style="max-width:200px;">
+                            <p class="small">Scan with any UPI app to pay</p>
+                            <div class="input-group mb-2">
+                                <input id="upi-id" class="form-control" value="abhishekaswal777@okicici" aria-label="UPI ID" readonly>
+                                <button id="copy-upi-id" class="btn btn-outline-secondary" type="button">Copy UPI ID</button>
+                            </div>
+                        </div>
+                        <div class="col-md-6 text-center mb-4">
+                            <h6 class="mb-3">Payment Link</h6>
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://example.com/pay/redteamtoolkit" 
+                                 alt="Payment Link QR" class="img-fluid mb-3" style="max-width:200px;">
+                            <p class="small">Scan to open payment page</p>
+                            <div class="input-group mb-2">
+                                <input id="payment-link" class="form-control" value="https://example.com/pay/redteamtoolkit" aria-label="Payment link" readonly>
+                                <button id="copy-payment-link" class="btn btn-outline-secondary" type="button">Copy Link</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <div class="alert alert-info">
+                                <small><i class="fas fa-info-circle me-2"></i>After payment, please submit the payment details using the form above to receive confirmation.</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-accent" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
-  </section>
 
-  <!-- ====== COURSES ====== -->
-  <section id="courses" class="page container mt-5 pt-5">
-    <div class="text-center mb-4">
-      <h2 class="fw-bold">Our Courses</h2>
-      <p>Master ethical hacking, red teaming, and penetration testing.</p>
-    </div>
-    <div class="row" id="courses-container"></div>
-  </section>
-
-  <!-- ====== CONTACT ====== -->
-  <section id="contact" class="page container mt-5 pt-5">
-    <h2 class="fw-bold mb-3 text-center">Contact Us</h2>
-    <form id="contactForm" class="shadow p-4 rounded bg-light">
-      <div class="mb-3">
-        <label class="form-label">Name</label>
-        <input type="text" id="name" class="form-control" placeholder="Your Name" required />
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Email</label>
-        <input type="email" id="email" class="form-control" placeholder="Your Email" required />
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Subject</label>
-        <input type="text" id="subject" class="form-control" placeholder="Subject" required />
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Message</label>
-        <textarea id="message" class="form-control" rows="4" placeholder="Type your message..."></textarea>
-      </div>
-
-      <div id="formAlert" class="alert d-none mt-3"></div>
-
-      <button id="submitBtn" type="submit" class="btn btn-accent w-100">
-        <span class="spinner-border spinner-border-sm d-none"></span>
-        <span class="submit-text">Send Message</span>
-      </button>
-    </form>
-  </section>
-
-  <!-- ====== PAYMENT ====== -->
-  <section id="payment" class="page container mt-5 pt-5">
-    <h2 class="fw-bold mb-4 text-center">Payment Portal</h2>
-    <form id="paymentForm" class="shadow p-4 rounded bg-light">
-      <div class="mb-3">
-        <label class="form-label">Name</label>
-        <input type="text" id="payer-name" class="form-control" placeholder="Full Name" required />
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Amount (INR)</label>
-        <input type="number" id="amount" class="form-control" placeholder="Amount to Pay" required />
-      </div>
-      <div class="mb-3">
-        <label class="form-label">UPI ID</label>
-        <input type="text" id="upi-id" class="form-control" value="hackerhalt@okaxis" readonly />
-        <button id="copy-upi-id" type="button" class="btn btn-outline-secondary mt-2">Copy UPI ID</button>
-      </div>
-      <div class="mb-3">
-        <label class="form-label">Payment Link</label>
-        <input type="text" id="payment-link" class="form-control" value="https://pay.google.com/hackerhalt" readonly />
-        <button id="copy-payment-link" type="button" class="btn btn-outline-secondary mt-2">Copy Payment Link</button>
-      </div>
-
-      <button type="submit" class="btn btn-success w-100">
-        <i class="fa-solid fa-qrcode me-2"></i> I’ve Paid via Google Pay
-      </button>
-    </form>
-  </section>
-
-  <footer class="text-center mt-5 py-3 bg-dark text-light">
-    <p class="m-0">
-      &copy; 2025 HackerHalt | All Rights Reserved
-    </p>
-  </footer>
-
-  <script src="script.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="script.js"></script>
 </body>
 </html>
